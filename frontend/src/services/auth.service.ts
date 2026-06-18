@@ -1,11 +1,14 @@
-import { api } from './api';
+import { api, setCsrfToken } from './api';
 import type { AuthUser } from '../types';
 
 let csrfToken: string | null = null;
 
 const initCsrf = async () => {
   const { data } = await api.get('/csrf-token');
+
   csrfToken = data.csrfToken;
+
+  setCsrfToken(data.csrfToken);
 };
 
 export const authService = {
