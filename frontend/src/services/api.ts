@@ -9,14 +9,20 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-api.interceptors.request.use((config) => {
-  const csrf = document.cookie
-    .split('; ')
-    .find(r => r.startsWith('csrf-token='))
-    ?.split('=')[1];
+let csrfToken: string | null = null;
 
-  if (csrf && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(config.method?.toUpperCase() || '')) {
-    config.headers['CSRF-Token'] = csrf;
+export const setCsrfToken = (token: string) => {
+  csrfToken = token;
+};
+
+api.interceptors.request.use((config) => {
+  if (
+    csrfToken &&
+    ['POST', 'PUT', 'PATCH', 'DELETE'].includes(
+      config.method?.toUpperCase() || ''
+    )
+  ) {
+    config.headers['CSRF-Token'] = csrfToken;
   }
 
   return config;
