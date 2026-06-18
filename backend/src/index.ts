@@ -9,6 +9,11 @@ import rateLimit from 'express-rate-limit';
 import crypto from 'crypto';
 
 const app = express();
+
+app.get('/ping', (_, res) => {
+  res.send('pong');
+});
+
 const PORT = process.env.PORT || 3001;
 
 app.set('trust proxy', 1);
